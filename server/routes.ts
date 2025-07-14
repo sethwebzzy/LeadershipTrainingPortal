@@ -1,10 +1,41 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertStudentSchema, insertContactSchema } from "@shared/schema";
+import { insertStudentSchema, insertContactSchema, insertUserSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Authentication endpoints
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      // In a real app, you'd check against database with hashed passwords
+      // For demo purposes, using hardcoded admin credentials
+      if (username === "admin" && password === "admin123") {
+        const adminUser = {
+          id: 1,
+          username: "admin",
+          password: "admin123" // In real app, this would be hashed
+        };
+        
+        // In a real app, you'd generate a proper JWT token
+        const token = "demo-jwt-token";
+        
+        res.json({ 
+          success: true, 
+          user: { id: adminUser.id, username: adminUser.username }, 
+          token 
+        });
+      } else {
+        res.status(401).json({ error: "Invalid credentials" });
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({ error: "Login failed" });
+    }
+  });
+
   // Student registration endpoint
   app.post("/api/students", async (req, res) => {
     try {
