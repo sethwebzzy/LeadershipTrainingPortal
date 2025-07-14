@@ -1,0 +1,69 @@
+Website Design & Development Brief for Leadership JOYCEP Training College
+Overview:
+We are developing a complete website (frontend + backend) for Leadership JOYCEP Training College, a health and wellness education institution located in Kitengela, Kenya. The website will function like a full university site (e.g., Grand Valley State University), with a custom landing page, course listings, intake info, service descriptions, contact forms, and more. The final site will be live on a custom domain (e.g., leadershipjoycepcollege.com).
+Core Objectives:
+Build a professional, responsive website that reflects the college's identity.
+Enable monthly intake registrations for short courses and diplomas.
+Display all core information: courses, services, contact details, payment info.
+Ensure mobile friendliness and ease of use.
+Integrate a backend for form submissions and possible student management.
+Target Users:
+Potential students interested in training (HTS, counselling, ECDE, etc.)
+Clients seeking health and psychological services
+General public looking to contact or learn more about the college
+Core Pages & Features:
+1. Home Page:
+College name, mission, visuals (graduation photos)
+Hero banner with “Register Now” CTA
+Highlight of monthly intakes
+2. Courses Page:
+Detailed listing of:
+HIV (VCT) Counselling and Testing – Short Course
+Adherence Counselling Certificate
+Diploma & Certificate in Counselling
+Primary Guidance
+Kenya Sign Language
+ECDE
+Course durations, certification details
+3. Services Page:
+List of services offered:
+Psychological Counselling
+Sex, Family, and Marriage Therapies
+HIV Counselling and Testing
+Adolescent Play Therapies
+Grief, Trauma, Student Counselling
+4. Admissions Page:
+Registration steps
+Monthly intake details
+MPESA payment instructions:
+Paybill: 544069
+Account: 831298 (Joyce)
+Form to submit registration info
+5. Contact Page:
+Phone numbers:
+0727 708 240 / 0732 522 089 / 0117 403 514
+Email: leadershipjoycepcentre@gmail.com
+Map embed (Kitengela location)
+WhatsApp button
+6. About Us Page:
+Background, vision, and history
+Staff/team (optional)
+Photos from graduation and college life
+7. Optional – Student Portal
+Login for students to track training progress
+Admin backend to view student applications
+Technology Stack Recommendation:
+Frontend: React.js with Tailwind CSS 
+Backend: Node.js + PHP
+Database: MySQL
+Design Notes:
+Brand colors: yellow, white, black (from flyers)
+Professional university-style layout
+Mobile-first responsive design
+Include "Register Now" buttons across pages
+Content & Visuals Provided:
+Physical flyer with all course info, contact details, and payment instructions
+Logo (from flyer)
+Services and main course offerings
+Next Steps:
+Please begin with a clean UI mockup of the landing page, then build out the other sections in phases. Backend API design and DB schema can follow after finalizing frontend structure.
