@@ -40,10 +40,15 @@ export default function AdminLogin() {
       return response;
     },
     onSuccess: (data) => {
+      console.log("Login successful:", data);
       login(data.user, data.token);
-      setLocation("/admin/dashboard");
+      // Use setTimeout to ensure state updates complete before redirect
+      setTimeout(() => {
+        setLocation("/admin/dashboard");
+      }, 100);
     },
     onError: (error: any) => {
+      console.error("Login error:", error);
       setError(error.message || "Login failed. Please try again.");
     },
   });

@@ -49,10 +49,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   const login = (userData: User, authToken: string) => {
+    console.log("AuthContext - login called with:", userData, authToken);
     setUser(userData);
     setToken(authToken);
     localStorage.setItem("auth_user", JSON.stringify(userData));
     localStorage.setItem("auth_token", authToken);
+    console.log("AuthContext - login completed, isAuthenticated will be:", !!userData);
   };
 
   const logout = () => {
