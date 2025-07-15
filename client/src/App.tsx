@@ -23,6 +23,13 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/admin/login" component={AdminLogin} />
+      <Route path="/admin">
+        <ProtectedRoute>
+          <AdminLayout>
+            <AdminDashboard />
+          </AdminLayout>
+        </ProtectedRoute>
+      </Route>
       <Route path="/admin/dashboard">
         <ProtectedRoute>
           <AdminLayout>

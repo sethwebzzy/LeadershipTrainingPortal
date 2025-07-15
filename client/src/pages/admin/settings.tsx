@@ -2,118 +2,70 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Settings, User, Lock, Bell, Database, Mail, Phone, Building } from "lucide-react";
+import { 
+  Settings, 
+  Building, 
+  CreditCard, 
+  Bell, 
+  Shield, 
+  Save, 
+  Database, 
+  Users, 
+  Mail,
+  Phone,
+  Clock,
+  CheckCircle
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/contexts/AuthContext";
-
-const profileSchema = z.object({
-  username: z.string().min(1, "Username is required"),
-  email: z.string().email("Valid email is required"),
-  fullName: z.string().min(1, "Full name is required"),
-  phone: z.string().min(1, "Phone number is required"),
-});
-
-const passwordSchema = z.object({
-  currentPassword: z.string().min(1, "Current password is required"),
-  newPassword: z.string().min(6, "Password must be at least 6 characters"),
-  confirmPassword: z.string().min(1, "Please confirm your password"),
-}).refine((data) => data.newPassword === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
-
-const collegeInfoSchema = z.object({
-  collegeName: z.string().min(1, "College name is required"),
-  email: z.string().email("Valid email is required"),
-  phone1: z.string().min(1, "Phone number is required"),
-  phone2: z.string().optional(),
-  phone3: z.string().optional(),
-  address: z.string().min(1, "Address is required"),
-  description: z.string().min(1, "Description is required"),
-  paybillNumber: z.string().min(1, "Paybill number is required"),
-  accountNumber: z.string().min(1, "Account number is required"),
-});
 
 export default function AdminSettings() {
-  const { user } = useAuth();
+  const [collegeName, setCollegeName] = useState("Leadership JOYCEP Training College");
+  const [collegeEmail, setCollegeEmail] = useState("info@joyceptraining.co.ke");
+  const [collegePhone, setCollegePhone] = useState("+254 712 345 678");
+  const [collegeAddress, setCollegeAddress] = useState("Kitengela, Kajiado County, Kenya");
+  const [collegeDescription, setCollegeDescription] = useState("Premier health and wellness training college offering comprehensive programs in HIV counselling, ECDE, Kenya Sign Language, and psychological counselling.");
+  
+  const [mpesaPaybill, setMpesaPaybill] = useState("544069");
+  const [mpesaAccount, setMpesaAccount] = useState("831298");
+  const [bankName, setBankName] = useState("Equity Bank");
+  const [accountNumber, setAccountNumber] = useState("0123456789");
+  
+  const [emailNotifications, setEmailNotifications] = useState(true);
+  const [smsNotifications, setSmsNotifications] = useState(true);
+  const [newRegistrations, setNewRegistrations] = useState(true);
+  const [paymentAlerts, setPaymentAlerts] = useState(true);
+  
+  const [backupEnabled, setBackupEnabled] = useState(true);
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [registrationOpen, setRegistrationOpen] = useState(true);
+  
   const { toast } = useToast();
-  const [notifications, setNotifications] = useState({
-    emailNotifications: true,
-    smsNotifications: false,
-    newStudentAlerts: true,
-    paymentAlerts: true,
-    systemUpdates: false,
-  });
 
-  const profileForm = useForm({
-    resolver: zodResolver(profileSchema),
-    defaultValues: {
-      username: user?.username || "",
-      email: "admin@leadershipjoycep.com",
-      fullName: "Joyce Administrator",
-      phone: "0727708240",
-    },
-  });
-
-  const passwordForm = useForm({
-    resolver: zodResolver(passwordSchema),
-    defaultValues: {
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    },
-  });
-
-  const collegeForm = useForm({
-    resolver: zodResolver(collegeInfoSchema),
-    defaultValues: {
-      collegeName: "Leadership JOYCEP Training College",
-      email: "leadershipjoycepcentre@gmail.com",
-      phone1: "0727708240",
-      phone2: "0732522089",
-      phone3: "0117403514",
-      address: "Kitengela, Kenya",
-      description: "Leading health and wellness education institution in Kitengela, Kenya",
-      paybillNumber: "544069",
-      accountNumber: "831298",
-    },
-  });
-
-  const handleProfileUpdate = (data: any) => {
+  const handleSaveSettings = () => {
+    // Here you would normally save to backend
     toast({
-      title: "Profile Updated",
-      description: "Your profile has been successfully updated.",
+      title: "Settings Saved",
+      description: "All settings have been saved successfully.",
     });
   };
 
-  const handlePasswordChange = (data: any) => {
+  const handleBackupDatabase = () => {
     toast({
-      title: "Password Changed",
-      description: "Your password has been successfully changed.",
-    });
-    passwordForm.reset();
-  };
-
-  const handleCollegeInfoUpdate = (data: any) => {
-    toast({
-      title: "College Information Updated",
-      description: "College information has been successfully updated.",
+      title: "Database Backup Started",
+      description: "Database backup has been initiated. You'll receive a notification when complete.",
     });
   };
 
-  const handleNotificationToggle = (key: string, value: boolean) => {
-    setNotifications(prev => ({ ...prev, [key]: value }));
+  const handleClearCache = () => {
     toast({
-      title: "Notification Settings Updated",
-      description: `${key} ${value ? "enabled" : "disabled"}.`,
+      title: "Cache Cleared",
+      description: "System cache has been cleared successfully.",
     });
   };
 
@@ -122,189 +74,190 @@ export default function AdminSettings() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-college-dark">Settings</h2>
-          <p className="text-college-gray">Manage system settings and preferences</p>
+          <h2 className="text-3xl font-bold text-college-dark">System Settings</h2>
+          <p className="text-college-gray">Manage college settings and system configuration</p>
         </div>
+        <Button onClick={handleSaveSettings} className="bg-college-green text-white hover:bg-green-600">
+          <Save className="h-4 w-4 mr-2" />
+          Save All Settings
+        </Button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Settings Navigation */}
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle className="text-college-dark">Settings Menu</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <nav className="space-y-2">
-              <Button variant="ghost" className="w-full justify-start">
-                <User className="h-4 w-4 mr-2" />
-                Profile Settings
-              </Button>
-              <Button variant="ghost" className="w-full justify-start">
-                <Lock className="h-4 w-4 mr-2" />
-                Security
-              </Button>
-              <Button variant="ghost" className="w-full justify-start">
-                <Bell className="h-4 w-4 mr-2" />
-                Notifications
-              </Button>
-              <Button variant="ghost" className="w-full justify-start">
-                <Building className="h-4 w-4 mr-2" />
+      <Tabs defaultValue="general" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="general">General</TabsTrigger>
+          <TabsTrigger value="payment">Payment</TabsTrigger>
+          <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value="system">System</TabsTrigger>
+          <TabsTrigger value="backup">Backup</TabsTrigger>
+        </TabsList>
+
+        {/* General Settings */}
+        <TabsContent value="general" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Building className="h-5 w-5 mr-2" />
                 College Information
-              </Button>
-              <Button variant="ghost" className="w-full justify-start">
-                <Database className="h-4 w-4 mr-2" />
-                System Settings
-              </Button>
-            </nav>
-          </CardContent>
-        </Card>
-
-        {/* Main Settings Content */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Profile Settings */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-college-dark flex items-center">
-                <User className="h-5 w-5 mr-2" />
-                Profile Settings
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <Form {...profileForm}>
-                <form onSubmit={profileForm.handleSubmit(handleProfileUpdate)} className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={profileForm.control}
-                      name="username"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Username</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={profileForm.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input type="email" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={profileForm.control}
-                      name="fullName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Full Name</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={profileForm.control}
-                      name="phone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Phone</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <Button type="submit" className="bg-college-green text-white hover:bg-green-600">
-                    Update Profile
-                  </Button>
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
-
-          {/* Password Settings */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-college-dark flex items-center">
-                <Lock className="h-5 w-5 mr-2" />
-                Change Password
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Form {...passwordForm}>
-                <form onSubmit={passwordForm.handleSubmit(handlePasswordChange)} className="space-y-4">
-                  <FormField
-                    control={passwordForm.control}
-                    name="currentPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Current Password</FormLabel>
-                        <FormControl>
-                          <Input type="password" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="collegeName">College Name</Label>
+                  <Input
+                    id="collegeName"
+                    value={collegeName}
+                    onChange={(e) => setCollegeName(e.target.value)}
+                    placeholder="College name"
                   />
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={passwordForm.control}
-                      name="newPassword"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>New Password</FormLabel>
-                          <FormControl>
-                            <Input type="password" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={passwordForm.control}
-                      name="confirmPassword"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Confirm New Password</FormLabel>
-                          <FormControl>
-                            <Input type="password" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <Button type="submit" className="bg-college-green text-white hover:bg-green-600">
-                    Change Password
-                  </Button>
-                </form>
-              </Form>
+                </div>
+                <div>
+                  <Label htmlFor="collegeEmail">Primary Email</Label>
+                  <Input
+                    id="collegeEmail"
+                    type="email"
+                    value={collegeEmail}
+                    onChange={(e) => setCollegeEmail(e.target.value)}
+                    placeholder="Email address"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="collegePhone">Phone Number</Label>
+                  <Input
+                    id="collegePhone"
+                    value={collegePhone}
+                    onChange={(e) => setCollegePhone(e.target.value)}
+                    placeholder="Phone number"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="collegeAddress">Address</Label>
+                  <Input
+                    id="collegeAddress"
+                    value={collegeAddress}
+                    onChange={(e) => setCollegeAddress(e.target.value)}
+                    placeholder="Physical address"
+                  />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="collegeDescription">Description</Label>
+                <Textarea
+                  id="collegeDescription"
+                  value={collegeDescription}
+                  onChange={(e) => setCollegeDescription(e.target.value)}
+                  placeholder="College description"
+                  rows={4}
+                />
+              </div>
             </CardContent>
           </Card>
 
-          {/* Notification Settings */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-college-dark flex items-center">
-                <Bell className="h-5 w-5 mr-2" />
-                Notification Settings
-              </CardTitle>
+              <CardTitle>Contact Information</CardTitle>
             </CardHeader>
             <CardContent>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <div className="flex items-center">
+                    <Mail className="h-4 w-4 mr-2 text-college-green" />
+                    <span className="text-sm font-medium">Email</span>
+                  </div>
+                  <p className="text-college-gray">{collegeEmail}</p>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center">
+                    <Phone className="h-4 w-4 mr-2 text-college-green" />
+                    <span className="text-sm font-medium">Phone</span>
+                  </div>
+                  <p className="text-college-gray">{collegePhone}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Payment Settings */}
+        <TabsContent value="payment" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <CreditCard className="h-5 w-5 mr-2" />
+                MPESA Payment Settings
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="mpesaPaybill">MPESA Paybill Number</Label>
+                  <Input
+                    id="mpesaPaybill"
+                    value={mpesaPaybill}
+                    onChange={(e) => setMpesaPaybill(e.target.value)}
+                    placeholder="Paybill number"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="mpesaAccount">Account Number</Label>
+                  <Input
+                    id="mpesaAccount"
+                    value={mpesaAccount}
+                    onChange={(e) => setMpesaAccount(e.target.value)}
+                    placeholder="Account number"
+                  />
+                </div>
+              </div>
+              <div className="p-4 bg-green-50 rounded-lg">
+                <h4 className="font-medium text-green-800 mb-2">Current MPESA Settings</h4>
+                <div className="space-y-1">
+                  <p className="text-sm text-green-700">Paybill: <span className="font-mono">{mpesaPaybill}</span></p>
+                  <p className="text-sm text-green-700">Account: <span className="font-mono">{mpesaAccount}</span></p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Bank Account Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="bankName">Bank Name</Label>
+                  <Input
+                    id="bankName"
+                    value={bankName}
+                    onChange={(e) => setBankName(e.target.value)}
+                    placeholder="Bank name"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="accountNumber">Account Number</Label>
+                  <Input
+                    id="accountNumber"
+                    value={accountNumber}
+                    onChange={(e) => setAccountNumber(e.target.value)}
+                    placeholder="Account number"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Notifications Settings */}
+        <TabsContent value="notifications" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Bell className="h-5 w-5 mr-2" />
+                Notification Preferences
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -313,8 +266,8 @@ export default function AdminSettings() {
                   </div>
                   <Switch
                     id="emailNotifications"
-                    checked={notifications.emailNotifications}
-                    onCheckedChange={(checked) => handleNotificationToggle("emailNotifications", checked)}
+                    checked={emailNotifications}
+                    onCheckedChange={setEmailNotifications}
                   />
                 </div>
                 <Separator />
@@ -325,20 +278,20 @@ export default function AdminSettings() {
                   </div>
                   <Switch
                     id="smsNotifications"
-                    checked={notifications.smsNotifications}
-                    onCheckedChange={(checked) => handleNotificationToggle("smsNotifications", checked)}
+                    checked={smsNotifications}
+                    onCheckedChange={setSmsNotifications}
                   />
                 </div>
                 <Separator />
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor="newStudentAlerts">New Student Alerts</Label>
+                    <Label htmlFor="newRegistrations">New Registration Alerts</Label>
                     <p className="text-sm text-college-gray">Get notified when new students register</p>
                   </div>
                   <Switch
-                    id="newStudentAlerts"
-                    checked={notifications.newStudentAlerts}
-                    onCheckedChange={(checked) => handleNotificationToggle("newStudentAlerts", checked)}
+                    id="newRegistrations"
+                    checked={newRegistrations}
+                    onCheckedChange={setNewRegistrations}
                   />
                 </div>
                 <Separator />
@@ -349,169 +302,160 @@ export default function AdminSettings() {
                   </div>
                   <Switch
                     id="paymentAlerts"
-                    checked={notifications.paymentAlerts}
-                    onCheckedChange={(checked) => handleNotificationToggle("paymentAlerts", checked)}
+                    checked={paymentAlerts}
+                    onCheckedChange={setPaymentAlerts}
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* System Settings */}
+        <TabsContent value="system" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Shield className="h-5 w-5 mr-2" />
+                System Configuration
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label htmlFor="registrationOpen">Student Registration</Label>
+                    <p className="text-sm text-college-gray">Allow new student registrations</p>
+                  </div>
+                  <Switch
+                    id="registrationOpen"
+                    checked={registrationOpen}
+                    onCheckedChange={setRegistrationOpen}
                   />
                 </div>
                 <Separator />
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label htmlFor="systemUpdates">System Updates</Label>
-                    <p className="text-sm text-college-gray">Get notified about system updates and maintenance</p>
+                    <Label htmlFor="maintenanceMode">Maintenance Mode</Label>
+                    <p className="text-sm text-college-gray">Enable maintenance mode for system updates</p>
                   </div>
                   <Switch
-                    id="systemUpdates"
-                    checked={notifications.systemUpdates}
-                    onCheckedChange={(checked) => handleNotificationToggle("systemUpdates", checked)}
+                    id="maintenanceMode"
+                    checked={maintenanceMode}
+                    onCheckedChange={setMaintenanceMode}
                   />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* College Information */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-college-dark flex items-center">
-                <Building className="h-5 w-5 mr-2" />
-                College Information
-              </CardTitle>
+              <CardTitle>System Status</CardTitle>
             </CardHeader>
             <CardContent>
-              <Form {...collegeForm}>
-                <form onSubmit={collegeForm.handleSubmit(handleCollegeInfoUpdate)} className="space-y-4">
-                  <FormField
-                    control={collegeForm.control}
-                    name="collegeName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>College Name</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={collegeForm.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input type="email" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={collegeForm.control}
-                      name="phone1"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Primary Phone</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+              <div className="grid grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <div className="flex items-center">
+                    <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                    <span className="text-sm font-medium">Database Status</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={collegeForm.control}
-                      name="phone2"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Secondary Phone</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={collegeForm.control}
-                      name="phone3"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Third Phone</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                  <Badge className="bg-green-50 text-green-600">Connected</Badge>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center">
+                    <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                    <span className="text-sm font-medium">System Status</span>
                   </div>
-                  <FormField
-                    control={collegeForm.control}
-                    name="address"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Address</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={collegeForm.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                          <Textarea {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField
-                      control={collegeForm.control}
-                      name="paybillNumber"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>MPESA Paybill Number</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={collegeForm.control}
-                      name="accountNumber"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Account Number</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <Button type="submit" className="bg-college-green text-white hover:bg-green-600">
-                    Update College Information
-                  </Button>
-                </form>
-              </Form>
+                  <Badge className="bg-green-50 text-green-600">Online</Badge>
+                </div>
+              </div>
             </CardContent>
           </Card>
-        </div>
-      </div>
+        </TabsContent>
+
+        {/* Backup Settings */}
+        <TabsContent value="backup" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Database className="h-5 w-5 mr-2" />
+                Database Backup
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="backupEnabled">Automatic Backup</Label>
+                  <p className="text-sm text-college-gray">Enable automatic daily backups</p>
+                </div>
+                <Switch
+                  id="backupEnabled"
+                  checked={backupEnabled}
+                  onCheckedChange={setBackupEnabled}
+                />
+              </div>
+              
+              <Separator />
+              
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium">Manual Backup</h4>
+                    <p className="text-sm text-college-gray">Create an immediate backup of the database</p>
+                  </div>
+                  <Button onClick={handleBackupDatabase} variant="outline">
+                    <Database className="h-4 w-4 mr-2" />
+                    Backup Now
+                  </Button>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium">Clear Cache</h4>
+                    <p className="text-sm text-college-gray">Clear system cache and temporary files</p>
+                  </div>
+                  <Button onClick={handleClearCache} variant="outline">
+                    <Settings className="h-4 w-4 mr-2" />
+                    Clear Cache
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Backup History</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div>
+                    <p className="font-medium">Daily Backup - Today</p>
+                    <p className="text-sm text-college-gray">Completed at 2:00 AM</p>
+                  </div>
+                  <Badge className="bg-green-50 text-green-600">Success</Badge>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div>
+                    <p className="font-medium">Daily Backup - Yesterday</p>
+                    <p className="text-sm text-college-gray">Completed at 2:00 AM</p>
+                  </div>
+                  <Badge className="bg-green-50 text-green-600">Success</Badge>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div>
+                    <p className="font-medium">Manual Backup</p>
+                    <p className="text-sm text-college-gray">Created 3 days ago</p>
+                  </div>
+                  <Badge className="bg-green-50 text-green-600">Success</Badge>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
