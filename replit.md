@@ -8,6 +8,15 @@ This is a full-stack web application for Leadership JOYCEP Training College, a h
 
 Preferred communication style: Simple, everyday language.
 
+## Recent Changes (Updated: July 16, 2025)
+
+✓ Created comprehensive .env file with secure configuration variables
+✓ Added detailed README.md with setup instructions and project documentation
+✓ Created .env.example template for easy setup
+✓ Updated .gitignore to protect sensitive environment files
+✓ Added debugging to login flow to troubleshoot authentication issues
+✓ Fixed authentication redirect timing with improved error handling
+
 ## System Architecture
 
 ### Frontend Architecture
